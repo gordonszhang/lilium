@@ -164,7 +164,15 @@ void Engine::update(Uint32 ticks) {
   for(auto* s : sprites) {
     s->update(ticks);
   }
+  int mouse_x, mouse_y;
+  float player_x, player_y;
+  SDL_GetMouseState(&mouse_x, &mouse_y);
+
   player->update(ticks);
+  player_x = player->getX() - viewport.getX();
+  player_y = player->getY() - viewport.getY();
+
+  hud.updateReticle((float)mouse_x, (float)mouse_y, player_x, player_y);
   boss->update(ticks);
   if(!playerAlive) {
     if(deathTimer > 60) {
@@ -206,7 +214,7 @@ void Engine::update(Uint32 ticks) {
 
 	if(playerShooting) {
 		if(shootTimer == 0) {
-      //sound[1];
+      ////sound[1];
 			float velX = 0.0;
 			float velY = -400.0;
 			if(freePlayerBullets.size() > 1) {
@@ -274,7 +282,7 @@ void Engine::checkForCollisions() {
       //player = boom;
       //delete player;
       //player = new Player("playership");
-      sound[2];
+      //sound[2];
         Drawable* temp = new Sprite("playershipE");
 				((Player*)player)->detachBarrier();
         ((Player*)player)->detachEnemy();
@@ -304,7 +312,7 @@ void Engine::checkForCollisions() {
       int i = it - playerBullets.begin();
       freePlayerBullets.push(i);
       if(!boss->isAlive()) {
-        sound[3];
+        //sound[3];
       //std::cout << sprites[10]->getName();
       //Drawable* boom = new ExplodingSprite(*static_cast<Sprite*>(player));
       //player = boom;
@@ -357,7 +365,7 @@ void Engine::play() {
           else clock.pause();
         }
         if ( keystate[SDL_SCANCODE_S] ) {
-          clock.toggleSloMo();
+          //clock.toggleSloMo();
         }
         if ( keystate[SDL_SCANCODE_R] ) {
           restart = true;
@@ -374,7 +382,7 @@ void Engine::play() {
           }
         }
 				if ( keystate[SDL_SCANCODE_X] && playerAlive ) {
-          sound[0];
+          //sound[0];
           ((Barrier*)barrier)->switchBarrier();
         }
         if (keystate[SDL_SCANCODE_F4] && !makeVideo) {
@@ -398,31 +406,37 @@ void Engine::play() {
 			if(keystate[SDL_SCANCODE_Z] && playerAlive) {
 				playerShooting = true;
 			}
+      if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
+        ((Player*)player)->slash();
+        	playerShooting = true;
+      }
       // Player control
       player->setVelocityX(0);
       player->setVelocityY(0);
-      if ( keystate[SDL_SCANCODE_LEFT] && keystate[SDL_SCANCODE_RIGHT] ) {
+      if ( keystate[SDL_SCANCODE_A] && keystate[SDL_SCANCODE_D] ) {
 
       }
-      else if ( keystate[SDL_SCANCODE_LEFT] ) {
+      else if ( keystate[SDL_SCANCODE_A] ) {
         player->setVelocityX(player->getVelocityX() - 200);
       }
-      else if ( keystate[SDL_SCANCODE_RIGHT] ) {
+      else if ( keystate[SDL_SCANCODE_D] ) {
         player->setVelocityX(player->getVelocityX() + 200);
       }
-      if ( keystate[SDL_SCANCODE_UP] && keystate[SDL_SCANCODE_DOWN] ) {
+      if ( keystate[SDL_SCANCODE_W] && keystate[SDL_SCANCODE_S] ) {
 
       }
-      else if ( keystate[SDL_SCANCODE_UP] ) {
+      else if ( keystate[SDL_SCANCODE_W] ) {
         player->setVelocityY(player->getVelocityY() - 200);
       }
-      else if ( keystate[SDL_SCANCODE_DOWN] ) {
+      else if ( keystate[SDL_SCANCODE_S] ) {
         player->setVelocityY(player->getVelocityY() + 200);
       }
 
     }
     ticks = clock.getElapsedTicks();
+
     if ( ticks > 0 ) {
+        /*
       if(bossAlive) {
         if(counter % 24 == 0) {
         for(int i = 0; i < 8; ++i) {
@@ -460,6 +474,7 @@ void Engine::play() {
         radians += M_PI / 32.0;
         }
       }
+      */
       ++counter;
       clock.incrFrame();
       draw();

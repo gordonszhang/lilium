@@ -7,6 +7,10 @@
 #include "barrier.h"
 #include "sprite.h"
 
+#define IDLE 0
+#define SLASHING 1
+#define CHANNEL 2
+
 class Player : public Drawable {
 public:
   Player(const std::string&);
@@ -26,6 +30,8 @@ public:
   void attachEnemy(Drawable* b);
   void detachEnemy();
 
+  void slash();
+
 protected:
   const std::vector<Frame *> frames;
   const std::vector<Frame *> framesRight;
@@ -37,6 +43,7 @@ protected:
   std::vector<Frame *> selectedFrames;
 	std::vector<Barrier *> barrier;
   std::vector<Sprite *> enemy;
+  Frame* slashUp;
 
   unsigned currentFrame;
   unsigned numberOfFrames;
@@ -47,6 +54,8 @@ protected:
   int frameWidth;
   int frameHeight;
   int state;
+  int actionstate;
+  int sinceLastChange;
   bool movingRight;
 
   bool isInvulnerable;

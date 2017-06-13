@@ -45,12 +45,12 @@ void HUD::draw() const {
   io.writeText(instr3.str(), white, 40, 170);
 
   std::stringstream a;
-  a << "Enemy bullets: ";
+  a << "Player Coordinates: " << player_x << ", " << player_y;
   SDL_Color blue = { 0, 0, 0xff, 0 };
   io.writeText(a.str(), blue, 40, 210);
 
   std::stringstream f;
-  f << "Alive: " << aliveBullets << " Free: " << freeBullets;
+  f << "Mouse Coordinates: " << mouse_x << " ," << mouse_y;
   //SDL_Color green = { 0, 0xff, 0, 0 };
   io.writeText(f.str(), blue, 40, 240);
 
@@ -68,6 +68,9 @@ void HUD::draw() const {
     SDL_Color green = { 0, 0xff, 0, 0 };
     io.writeText(w.str(), green, 375, 200);
   }
+
+  SDL_SetRenderDrawColor(rc->getRenderer(), 255, 50, 50, 200);
+  SDL_RenderDrawLine(rc->getRenderer(), player_x, player_y, mouse_x, mouse_y);
 }
 
 void HUD::updateCounts(int alive, int free) {
@@ -85,4 +88,11 @@ void HUD::updateBoss(int h) {
 
 void HUD::updateDeaths(int d) {
   deaths = d;
+}
+
+void HUD::updateReticle(float mx, float my, float px, float py) {
+  mouse_x = mx;
+  mouse_y = my;
+  player_x = px;
+  player_y = py;
 }

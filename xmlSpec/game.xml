@@ -53,6 +53,11 @@
   <transparency>true</transparency>
 </spinstar>
 
+<slashUp>
+  <file>images/slashUp.png</file>
+  <frames>1</frames>
+</slashUp>
+
 <playership>
   <file>images/playership.png</file>
   <frameInterval>100</frameInterval>

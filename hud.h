@@ -15,6 +15,8 @@ public:
   void updateCollisions(int c);
   void updateBoss(int health);
   void updateDeaths(int deaths);
+  void updateReticle(float mouse_x, float mouse_y, float player_x, float player_y);
+
 private:
   const RenderContext* rc;
   const IOmod& io;
@@ -24,6 +26,10 @@ private:
   int collisions;
   int bossHealth;
   int deaths;
+  float mouse_x;
+  float mouse_y;
+  float player_x;
+  float player_y;
 };
 
 #endif

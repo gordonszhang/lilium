@@ -24,6 +24,7 @@ Player::Player( const std::string& name) :
 	framesTransitionLeft(RenderContext::getInstance()->getFrames(name+"TL")),
   framesTurnRight(RenderContext::getInstance()->getFrames(name+"UR")),
 	framesTurnLeft(RenderContext::getInstance()->getFrames(name+"UL")),
+  slashUp(RenderContext::getInstance()->getFrame("slashUp")),
 	selectedFrames(frames),
 	barrier(),
   enemy(),
@@ -35,7 +36,8 @@ Player::Player( const std::string& name) :
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
   frameWidth(frames[0]->getWidth()),
   frameHeight(frames[0]->getHeight()),
-	state(0), movingRight(false),
+	state(0), actionstate(0),
+  sinceLastChange(0), movingRight(false),
   isInvulnerable(false), offFrame()
 { }
 
@@ -48,6 +50,7 @@ Player::Player(const Player& s) :
 	framesTransitionLeft(s.framesLeft),
   framesTurnRight(s.framesTurnRight),
 	framesTurnLeft(s.framesTurnLeft),
+  slashUp(s.slashUp),
 	selectedFrames(s.selectedFrames),
 	barrier(s.barrier),
   enemy(s.enemy),
@@ -59,7 +62,8 @@ Player::Player(const Player& s) :
   worldHeight( s.worldHeight ),
   frameWidth( s.frameWidth ),
   frameHeight( s.frameHeight ),
-	state(s.state), movingRight(s.movingRight),
+	state(s.state), actionstate(s.actionstate),
+  sinceLastChange(s.sinceLastChange), movingRight(s.movingRight),
   isInvulnerable(s.isInvulnerable), offFrame(s.offFrame)
   { }
 
@@ -73,10 +77,23 @@ void Player::draw() const {
       selectedFrames[currentFrame]->draw(getX(), getY());
     }
   }
+  if(actionstate == SLASHING) {
+    slashUp->draw(getX(), getY());
+  }
+}
+
+void Player::slash() {
+  actionstate = SLASHING;
+  sinceLastChange = 0;
 }
 
 void Player::update(Uint32 ticks) {
   advanceFrame(ticks);
+
+  if(actionstate == SLASHING) {
+    if(sinceLastChange < 5) ++sinceLastChange;
+    else actionstate = IDLE;
+  }
 
   if(!isAlive()) offFrame = (offFrame + 1) % 4;
   Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;
