@@ -8,8 +8,21 @@
 #include "sprite.h"
 
 #define IDLE 0
-#define SLASHING 1
-#define CHANNEL 2
+#define SLASH_A1 1
+#define SLASH_A2 2
+#define SLASH_A3 3
+#define SLASH_B1 4
+#define SLASH_B2 5
+#define SLASH_B3 6
+#define SLASH_C1 7
+#define SLASH_C2 8
+#define SLASH_C3 9
+#define CHANNEL 3
+
+#define UP 100
+#define DOWN 101
+#define LEFT 102
+#define RIGHT 103
 
 class Player : public Drawable {
 public:
@@ -30,7 +43,8 @@ public:
   void attachEnemy(Drawable* b);
   void detachEnemy();
 
-  void slash();
+  void changeState(char);
+  char getState();
 
 protected:
   const std::vector<Frame *> frames;
@@ -54,7 +68,7 @@ protected:
   int frameWidth;
   int frameHeight;
   int state;
-  int actionstate;
+  char actionstate;
   int sinceLastChange;
   bool movingRight;
 

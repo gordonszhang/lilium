@@ -407,8 +407,7 @@ void Engine::play() {
 				playerShooting = true;
 			}
       if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-        ((Player*)player)->slash();
-        	playerShooting = true;
+        ((Player*)player)->changeState(SLASH_A1);
       }
       // Player control
       player->setVelocityX(0);

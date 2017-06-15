@@ -77,21 +77,25 @@ void Player::draw() const {
       selectedFrames[currentFrame]->draw(getX(), getY());
     }
   }
-  if(actionstate == SLASHING) {
+  if(actionstate == SLASH_A1) {
     slashUp->draw(getX(), getY());
   }
 }
 
-void Player::slash() {
-  actionstate = SLASHING;
+void Player::changeState(char state) {
+  actionstate = state;
   sinceLastChange = 0;
+}
+
+char Player::getState() {
+  return actionstate;
 }
 
 void Player::update(Uint32 ticks) {
   advanceFrame(ticks);
 
-  if(actionstate == SLASHING) {
-    if(sinceLastChange < 5) ++sinceLastChange;
+  if(actionstate == SLASH_A1) {
+    if(sinceLastChange < 8) ++sinceLastChange;
     else actionstate = IDLE;
   }
 
