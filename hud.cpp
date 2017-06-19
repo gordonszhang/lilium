@@ -7,7 +7,8 @@ HUD::HUD() : rc( RenderContext::getInstance() ),
   freeBullets(),
   collisions(),
   bossHealth(200),
-  deaths(0) {
+  deaths(0),
+  state(0) {
 }
 
 void HUD::draw() const {
@@ -59,7 +60,7 @@ void HUD::draw() const {
   io.writeText(c.str(), blue, 40, 270);
 
   std::stringstream d;
-  d << "Deaths: " << deaths;
+  d << "State: " << state;
   io.writeText(d.str(), blue, 40, 300);
 
   if(bossHealth == 0) {
@@ -95,4 +96,8 @@ void HUD::updateReticle(float mx, float my, float px, float py) {
   mouse_y = my;
   player_x = px;
   player_y = py;
+}
+
+void HUD::updateState(char s) {
+  state = s;
 }

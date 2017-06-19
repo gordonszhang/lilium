@@ -1,5 +1,6 @@
 #ifndef PLAYER__H
 #define PLAYER__H
+#include <SDL.h>
 #include <string>
 #include <vector>
 #include <cmath>
@@ -43,7 +44,7 @@ public:
   void attachEnemy(Drawable* b);
   void detachEnemy();
 
-  void changeState(char);
+  void handleInput(SDL_Event event, const Uint8*, const Uint32);
   char getState();
 
 protected:
@@ -68,8 +69,9 @@ protected:
   int frameWidth;
   int frameHeight;
   int state;
-  char actionstate;
-  int sinceLastChange;
+  char actionState;
+  char nextState;
+  int stateTimer;
   bool movingRight;
 
   bool isInvulnerable;

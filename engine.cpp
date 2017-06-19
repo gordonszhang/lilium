@@ -173,6 +173,7 @@ void Engine::update(Uint32 ticks) {
   player_y = player->getY() - viewport.getY();
 
   hud.updateReticle((float)mouse_x, (float)mouse_y, player_x, player_y);
+  hud.updateState(((Player*)player)->getState());
   boss->update(ticks);
   if(!playerAlive) {
     if(deathTimer > 60) {
@@ -347,6 +348,7 @@ void Engine::backSprite(){
 void Engine::play() {
   SDL_Event event;
   const Uint8* keystate;
+  Uint32 mousestate;
   bool done = false;
   Uint32 ticks = clock.getElapsedTicks();
   FrameGenerator frameGen;
@@ -354,6 +356,7 @@ void Engine::play() {
   while ( !done ) {
     while ( SDL_PollEvent(&event) ) {
       keystate = SDL_GetKeyboardState(NULL);
+      mousestate = SDL_GetMouseState(NULL, NULL);
       if (event.type ==  SDL_QUIT) { done = true; break; }
       if(event.type == SDL_KEYDOWN) {
         if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
@@ -402,36 +405,10 @@ void Engine::play() {
           showHUD = false;
         }
       }
-			playerShooting = false;
-			if(keystate[SDL_SCANCODE_Z] && playerAlive) {
-				playerShooting = true;
-			}
-      if (SDL_GetMouseState(NULL, NULL) & SDL_BUTTON(SDL_BUTTON_LEFT)) {
-        ((Player*)player)->changeState(SLASH_A1);
-      }
-      // Player control
-      player->setVelocityX(0);
-      player->setVelocityY(0);
-      if ( keystate[SDL_SCANCODE_A] && keystate[SDL_SCANCODE_D] ) {
-
-      }
-      else if ( keystate[SDL_SCANCODE_A] ) {
-        player->setVelocityX(player->getVelocityX() - 200);
-      }
-      else if ( keystate[SDL_SCANCODE_D] ) {
-        player->setVelocityX(player->getVelocityX() + 200);
-      }
-      if ( keystate[SDL_SCANCODE_W] && keystate[SDL_SCANCODE_S] ) {
-
-      }
-      else if ( keystate[SDL_SCANCODE_W] ) {
-        player->setVelocityY(player->getVelocityY() - 200);
-      }
-      else if ( keystate[SDL_SCANCODE_S] ) {
-        player->setVelocityY(player->getVelocityY() + 200);
-      }
-
+      ((Player*)player)->handleInput(event, keystate, mousestate);
+      
     }
+   
     ticks = clock.getElapsedTicks();
 
     if ( ticks > 0 ) {

@@ -16,7 +16,7 @@ public:
   void updateBoss(int health);
   void updateDeaths(int deaths);
   void updateReticle(float mouse_x, float mouse_y, float player_x, float player_y);
-
+  void updateState(char state);
 private:
   const RenderContext* rc;
   const IOmod& io;
@@ -30,6 +30,7 @@ private:
   float mouse_y;
   float player_x;
   float player_y;
+  int state;
 };
 
 #endif
