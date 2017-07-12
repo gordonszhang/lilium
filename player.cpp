@@ -94,16 +94,17 @@ void Player::draw() const {
       else if(direction == LEFT) {
         slashLeft->draw(getX(), getY());
       }
-    
+
   }
 }
 
 void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousestate) {
-  nextState = IDLE;
+
   // Player control
   if(actionState != SLASH_A1) {
+		nextState = IDLE;
     if ( keystate[SDL_SCANCODE_A] && keystate[SDL_SCANCODE_D] ) {
-    
+
     }
     else if ( keystate[SDL_SCANCODE_A] ) {
       nextState = MOVE;
@@ -129,8 +130,10 @@ void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousesta
    // "Slash" input
   if(event.type == SDL_KEYDOWN && event.key.repeat == 0) {
     if (keystate[SDL_SCANCODE_J]) {
-      nextState = SLASH_A1;
-      stateTimer = 0;
+      actionState = SLASH_A1;
+			nextState = IDLE;
+			stateTimer = 12;
+      //stateTimer = 0;
     }
     /*
     if (mousestate && SDL_BUTTON(SDL_BUTTON_LEFT)) {
@@ -149,12 +152,17 @@ void Player::update(Uint32 ticks) {
   advanceFrame(ticks);
 
   if(stateTimer <= 0) {
+
+		if(nextState == SLASH_A1) {
+			std::cout << "nextState is " << (int)nextState << std::endl;
+		}
     actionState = nextState;
     if(actionState == SLASH_A1) {
+			std::cout << "hi im slashing" << std::endl;
       stateTimer = 12;
     }
+
     else if(actionState == MOVE) {
-      stateTimer = 0;
     }
   }
 
