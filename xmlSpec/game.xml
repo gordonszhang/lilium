@@ -57,6 +57,18 @@
   <file>images/slashUp.png</file>
   <frames>1</frames>
 </slashUp>
+<slashDown>
+  <file>images/slashDown.png</file>
+  <frames>1</frames>
+</slashDown>
+<slashRight>
+  <file>images/slashRight.png</file>
+  <frames>1</frames>
+</slashRight>
+<slashLeft>
+  <file>images/slashLeft.png</file>
+  <frames>1</frames>
+</slashLeft>
 
 <playership>
   <file>images/playership.png</file>

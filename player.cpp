@@ -24,10 +24,13 @@ Player::Player( const std::string& name) :
 	framesTransitionLeft(RenderContext::getInstance()->getFrames(name+"TL")),
   framesTurnRight(RenderContext::getInstance()->getFrames(name+"UR")),
 	framesTurnLeft(RenderContext::getInstance()->getFrames(name+"UL")),
-  slashUp(RenderContext::getInstance()->getFrame("slashUp")),
 	selectedFrames(frames),
 	barrier(),
   enemy(),
+  slashUp(RenderContext::getInstance()->getFrame("slashUp")),
+  slashDown(RenderContext::getInstance()->getFrame("slashDown")),
+  slashRight(RenderContext::getInstance()->getFrame("slashRight")),
+  slashLeft(RenderContext::getInstance()->getFrame("slashLeft")),
   currentFrame(0),
   numberOfFrames( Gamedata::getInstance().getXmlInt(name+"I/frames") ),
   frameInterval( Gamedata::getInstance().getXmlInt(name+"I/frameInterval")),
@@ -36,7 +39,7 @@ Player::Player( const std::string& name) :
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
   frameWidth(frames[0]->getWidth()),
   frameHeight(frames[0]->getHeight()),
-	state(0), actionState(0), nextState(0),
+	state(0), actionState(0), nextState(0), direction(0),
   stateTimer(0), movingRight(false),
   isInvulnerable(false), offFrame()
 { }
@@ -50,10 +53,11 @@ Player::Player(const Player& s) :
 	framesTransitionLeft(s.framesLeft),
   framesTurnRight(s.framesTurnRight),
 	framesTurnLeft(s.framesTurnLeft),
-  slashUp(s.slashUp),
 	selectedFrames(s.selectedFrames),
 	barrier(s.barrier),
   enemy(s.enemy),
+  slashUp(s.slashUp), slashDown(s.slashDown),
+  slashRight(s.slashRight), slashLeft(s.slashLeft),
   currentFrame(s.currentFrame),
   numberOfFrames( s.numberOfFrames ),
   frameInterval( s.frameInterval ),
@@ -62,7 +66,7 @@ Player::Player(const Player& s) :
   worldHeight( s.worldHeight ),
   frameWidth( s.frameWidth ),
   frameHeight( s.frameHeight ),
-	state(s.state), actionState(s.actionState), nextState(s.nextState),
+	state(s.state), actionState(s.actionState), nextState(s.nextState), direction(s.direction),
   stateTimer(s.stateTimer), movingRight(s.movingRight),
   isInvulnerable(s.isInvulnerable), offFrame(s.offFrame)
   { }
@@ -77,52 +81,64 @@ void Player::draw() const {
       selectedFrames[currentFrame]->draw(getX(), getY());
     }
   }
-  if(actionState == SLASH_A1 || actionState == SLASH_A2 
-     || actionState == SLASH_B1 || actionState == SLASH_B2
-     || actionState == SLASH_C1 || actionState == SLASH_C2) {
-    slashUp->draw(getX(), getY());
+  if(actionState == SLASH_A1) {
+      if(direction == UP) {
+        slashUp->draw(getX(), getY());
+      }
+      else if(direction == DOWN) {
+        slashDown->draw(getX(), getY());
+      }
+      else if(direction == RIGHT) {
+        slashRight->draw(getX(), getY());
+      }
+      else if(direction == LEFT) {
+        slashLeft->draw(getX(), getY());
+      }
+    
   }
 }
 
 void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousestate) {
-    // "Slash" input
-    if(event.type == SDL_MOUSEBUTTONDOWN) {
-      if (mousestate && SDL_BUTTON(SDL_BUTTON_LEFT)) {
-        if(actionState == IDLE) {
-          nextState = SLASH_A1;
-          stateTimer = 0;
-        }
-        if(actionState == SLASH_A2) {
-          nextState = SLASH_B1;
-        }
-        if(actionState == SLASH_B2) {
-          nextState = SLASH_C1;
-        }
-      }
-    }
-    // Player control
-    setVelocityX(0);
-    setVelocityY(0);
+  nextState = IDLE;
+  // Player control
+  if(actionState != SLASH_A1) {
     if ( keystate[SDL_SCANCODE_A] && keystate[SDL_SCANCODE_D] ) {
-
+    
     }
     else if ( keystate[SDL_SCANCODE_A] ) {
-      setVelocityX(getVelocityX() - 200);
+      nextState = MOVE;
+      direction = LEFT;
     }
     else if ( keystate[SDL_SCANCODE_D] ) {
-      setVelocityX(getVelocityX() + 200);
+      nextState = MOVE;
+      direction = RIGHT;
     }
     if ( keystate[SDL_SCANCODE_W] && keystate[SDL_SCANCODE_S] ) {
 
     }
     else if ( keystate[SDL_SCANCODE_W] ) {
-      setVelocityY(getVelocityY() - 200);
+      nextState = MOVE;
+      direction = UP;
     }
     else if ( keystate[SDL_SCANCODE_S] ) {
-      setVelocityY(getVelocityY() + 200);
+      nextState = MOVE;
+      direction = DOWN;
     }
+  }
 
-  
+   // "Slash" input
+  if(event.type == SDL_KEYDOWN && event.key.repeat == 0) {
+    if (keystate[SDL_SCANCODE_J]) {
+      nextState = SLASH_A1;
+      stateTimer = 0;
+    }
+    /*
+    if (mousestate && SDL_BUTTON(SDL_BUTTON_LEFT)) {
+      nextState = SLASH_A1;
+      stateTimer = 0;
+    }
+    */
+  }
 }
 
 char Player::getState() {
@@ -132,50 +148,27 @@ char Player::getState() {
 void Player::update(Uint32 ticks) {
   advanceFrame(ticks);
 
-  if(stateTimer == 0) {
+  if(stateTimer <= 0) {
     actionState = nextState;
     if(actionState == SLASH_A1) {
-      nextState = SLASH_A2;
-      stateTimer = 6;
-    }
-    else if(actionState == SLASH_A2) {
-      nextState = SLASH_A3;
       stateTimer = 12;
     }
-    else if(actionState == SLASH_A3) {
-      nextState = IDLE;
-      stateTimer = 4;
+    else if(actionState == MOVE) {
+      stateTimer = 0;
     }
-
-    else if(actionState == SLASH_B1) {
-      nextState = SLASH_B2;
-      stateTimer = 6;
-    }
-    else if(actionState == SLASH_B2) {
-      nextState = SLASH_B3;
-      stateTimer = 12;
-    }
-    else if(actionState == SLASH_B3) {
-      nextState = IDLE;
-      stateTimer = 4;
-    }
-
-    else if(actionState == SLASH_C1) {
-      nextState = SLASH_A2;
-      stateTimer = 6;
-    }
-    else if(actionState == SLASH_C2) {
-      nextState = SLASH_A3;
-      stateTimer = 18;
-    }
-    else if(actionState == SLASH_C3) {
-      nextState = IDLE;
-      stateTimer = 4;
-    }
-    
   }
 
-  --stateTimer;
+  if(stateTimer > -1) --stateTimer;
+
+  setVelocityX(0);
+  setVelocityY(0);
+
+  if(actionState == MOVE) {
+    if(direction == UP) setVelocityY(-200);
+    else if(direction == DOWN) setVelocityY(200);
+    else if(direction == LEFT) setVelocityX(-200);
+    else if(direction == RIGHT) setVelocityX(200);
+  }
 
   if(!isAlive()) offFrame = (offFrame + 1) % 4;
   Vector2f incr = getVelocity() * static_cast<float>(ticks) * 0.001;

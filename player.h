@@ -10,15 +10,7 @@
 
 #define IDLE 0
 #define SLASH_A1 1
-#define SLASH_A2 2
-#define SLASH_A3 3
-#define SLASH_B1 4
-#define SLASH_B2 5
-#define SLASH_B3 6
-#define SLASH_C1 7
-#define SLASH_C2 8
-#define SLASH_C3 9
-#define CHANNEL 3
+#define MOVE 2
 
 #define UP 100
 #define DOWN 101
@@ -59,6 +51,9 @@ protected:
 	std::vector<Barrier *> barrier;
   std::vector<Sprite *> enemy;
   Frame* slashUp;
+  Frame* slashDown;
+  Frame* slashRight;
+  Frame* slashLeft;
 
   unsigned currentFrame;
   unsigned numberOfFrames;
@@ -71,6 +66,7 @@ protected:
   int state;
   char actionState;
   char nextState;
+  char direction;
   int stateTimer;
   bool movingRight;
 
