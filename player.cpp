@@ -39,7 +39,7 @@ Player::Player( const std::string& name) :
   worldHeight(Gamedata::getInstance().getXmlInt("world/height")),
   frameWidth(frames[0]->getWidth()),
   frameHeight(frames[0]->getHeight()),
-	state(0), actionState(0), nextState(0), direction(0),
+	state(0), actionState(0), nextState(0), direction(UP), moveVector(0, 0),
   stateTimer(0), movingRight(false),
   isInvulnerable(false), offFrame()
 { }
@@ -66,7 +66,7 @@ Player::Player(const Player& s) :
   worldHeight( s.worldHeight ),
   frameWidth( s.frameWidth ),
   frameHeight( s.frameHeight ),
-	state(s.state), actionState(s.actionState), nextState(s.nextState), direction(s.direction),
+	state(s.state), actionState(s.actionState), nextState(s.nextState), direction(s.direction), moveVector(s.moveVector),
   stateTimer(s.stateTimer), movingRight(s.movingRight),
   isInvulnerable(s.isInvulnerable), offFrame(s.offFrame)
   { }
@@ -99,31 +99,36 @@ void Player::draw() const {
 }
 
 void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousestate) {
-
   // Player control
   if(actionState != SLASH_A1) {
+    moveVector[0] = 0;
+    moveVector[1] = 0;
 		nextState = IDLE;
     if ( keystate[SDL_SCANCODE_A] && keystate[SDL_SCANCODE_D] ) {
 
     }
     else if ( keystate[SDL_SCANCODE_A] ) {
-      nextState = MOVE;
-      direction = LEFT;
+      moveVector[0] = -1;
+      if(direction == RIGHT) direction = LEFT;
     }
     else if ( keystate[SDL_SCANCODE_D] ) {
-      nextState = MOVE;
-      direction = RIGHT;
+      moveVector[0] = 1;
+      if(direction == LEFT) direction = RIGHT;
     }
     if ( keystate[SDL_SCANCODE_W] && keystate[SDL_SCANCODE_S] ) {
 
     }
     else if ( keystate[SDL_SCANCODE_W] ) {
-      nextState = MOVE;
-      direction = UP;
+       moveVector[1] = -1;
+      if(direction == DOWN) direction = UP;
     }
     else if ( keystate[SDL_SCANCODE_S] ) {
+       moveVector[1] = 1;
+      if(direction == UP) direction = DOWN;
+    }
+
+    if(moveVector[0] != 0 || moveVector[1] != 0) {
       nextState = MOVE;
-      direction = DOWN;
     }
   }
 
@@ -172,10 +177,8 @@ void Player::update(Uint32 ticks) {
   setVelocityY(0);
 
   if(actionState == MOVE) {
-    if(direction == UP) setVelocityY(-200);
-    else if(direction == DOWN) setVelocityY(200);
-    else if(direction == LEFT) setVelocityX(-200);
-    else if(direction == RIGHT) setVelocityX(200);
+    setVelocityX(moveVector[0] * 200);
+    setVelocityY(moveVector[1] * 200);
   }
 
   if(!isAlive()) offFrame = (offFrame + 1) % 4;

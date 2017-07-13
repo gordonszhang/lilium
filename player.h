@@ -67,6 +67,7 @@ protected:
   char actionState;
   char nextState;
   char direction;
+  Vector2f moveVector;
   int stateTimer;
   bool movingRight;
 
