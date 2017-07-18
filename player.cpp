@@ -98,7 +98,10 @@ void Player::draw() const {
   }
 }
 
-void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousestate) {
+void Player::handleInput() {
+  SDL_Event event;
+  
+  const Uint8* keystate = SDL_GetKeyboardState(NULL);
   // Player control
   if(actionState != SLASH_A1) {
     moveVector[0] = 0;
@@ -131,21 +134,22 @@ void Player::handleInput(SDL_Event event, const Uint8* keystate, Uint32 mousesta
       nextState = MOVE;
     }
   }
-
-   // "Slash" input
-  if(event.type == SDL_KEYDOWN && event.key.repeat == 0) {
-    if (keystate[SDL_SCANCODE_J]) {
-      actionState = SLASH_A1;
-			nextState = IDLE;
-			stateTimer = 12;
-      //stateTimer = 0;
+  while(SDL_PollEvent(&event)) {
+    // "Slash" input
+    if(event.type == SDL_KEYDOWN && event.key.repeat == 0) {
+      if (keystate[SDL_SCANCODE_J]) {
+        actionState = SLASH_A1;
+        nextState = IDLE;
+        stateTimer = 12;
+        //stateTimer = 0;
+      }
+      /*
+      if (mousestate && SDL_BUTTON(SDL_BUTTON_LEFT)) {
+        nextState = SLASH_A1;
+        stateTimer = 0;
+      }
+      */
     }
-    /*
-    if (mousestate && SDL_BUTTON(SDL_BUTTON_LEFT)) {
-      nextState = SLASH_A1;
-      stateTimer = 0;
-    }
-    */
   }
 }
 

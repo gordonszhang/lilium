@@ -354,10 +354,11 @@ void Engine::play() {
   FrameGenerator frameGen;
 
   while ( !done ) {
+    ((Player*)player)->handleInput();
+    /*
     while ( SDL_PollEvent(&event) ) {
       keystate = SDL_GetKeyboardState(NULL);
       mousestate = SDL_GetMouseState(NULL, NULL);
-      ((Player*)player)->handleInput(event, keystate, mousestate);
       if (event.type ==  SDL_QUIT) { done = true; break; }
       if(event.type == SDL_KEYDOWN) {
         if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
@@ -407,7 +408,7 @@ void Engine::play() {
         }
       }
     }
-   
+    */
     ticks = clock.getElapsedTicks();
 
     if ( ticks > 0 ) {

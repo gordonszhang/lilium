@@ -36,7 +36,7 @@ public:
   void attachEnemy(Drawable* b);
   void detachEnemy();
 
-  void handleInput(SDL_Event event, const Uint8*, const Uint32);
+  void handleInput();
   char getState();
 
 protected:
