@@ -4,16 +4,16 @@
 FrameFactory*  FrameFactory::instance = NULL;
 RenderContext* RenderContext::instance = NULL;
 
-bool restart = true;
+//bool restart = true;
 
 int main(int, char*[]) {
 
    try {
-      while(restart) {
+      //while(restart) {
         Engine engine;
-        restart = false;
+        //restart = false;
         engine.play();
-      }
+//}
       delete RenderContext::getInstance();
 
    }

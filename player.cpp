@@ -112,22 +112,22 @@ void Player::handleInput() {
     }
     else if ( keystate[SDL_SCANCODE_A] ) {
       moveVector[0] = -1;
-      if(direction == RIGHT) direction = LEFT;
+      if(actionState != MOVE || direction == RIGHT) direction = LEFT;
     }
     else if ( keystate[SDL_SCANCODE_D] ) {
       moveVector[0] = 1;
-      if(direction == LEFT) direction = RIGHT;
+      if(actionState != MOVE || direction == LEFT) direction = RIGHT;
     }
     if ( keystate[SDL_SCANCODE_W] && keystate[SDL_SCANCODE_S] ) {
 
     }
     else if ( keystate[SDL_SCANCODE_W] ) {
        moveVector[1] = -1;
-      if(direction == DOWN) direction = UP;
+      if(actionState != MOVE || direction == DOWN) direction = UP;
     }
     else if ( keystate[SDL_SCANCODE_S] ) {
        moveVector[1] = 1;
-      if(direction == UP) direction = DOWN;
+      if(actionState != MOVE || direction == UP) direction = DOWN;
     }
 
     if(moveVector[0] != 0 || moveVector[1] != 0) {
@@ -136,6 +136,7 @@ void Player::handleInput() {
   }
   while(SDL_PollEvent(&event)) {
     // "Slash" input
+    if(event.type == SDL_QUIT) { exit(0); }
     if(event.type == SDL_KEYDOWN && event.key.repeat == 0) {
       if (keystate[SDL_SCANCODE_J]) {
         actionState = SLASH_A1;

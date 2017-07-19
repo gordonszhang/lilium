@@ -13,7 +13,7 @@
 #include "frameGenerator.h"
 #include "barrier.h"
 
-extern bool restart;
+//extern bool restart;
 
 class DrawComp {
 public:
@@ -360,6 +360,7 @@ void Engine::play() {
       keystate = SDL_GetKeyboardState(NULL);
       mousestate = SDL_GetMouseState(NULL, NULL);
       if (event.type ==  SDL_QUIT) { done = true; break; }
+      /*
       if(event.type == SDL_KEYDOWN) {
         if (keystate[SDL_SCANCODE_ESCAPE] || keystate[SDL_SCANCODE_Q]) {
           done = true;
@@ -407,6 +408,7 @@ void Engine::play() {
           showHUD = false;
         }
       }
+      
     }
     */
     ticks = clock.getElapsedTicks();
