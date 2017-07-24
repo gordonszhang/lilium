@@ -18,6 +18,7 @@ public:
 
   virtual void setAlive(bool a);
     void setDirection(int d);
+    int getDirection();
 
 protected:
   const std::vector<Frame *> framesUp;

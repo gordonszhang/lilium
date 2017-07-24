@@ -98,3 +98,7 @@ void Slash::setAlive(bool a) {
 void Slash::setDirection(int d) {
     direction = d;
 }
+
+int Slash::getDirection() {
+    return direction;
+}

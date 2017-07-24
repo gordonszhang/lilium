@@ -171,14 +171,20 @@ void Player::update(Uint32 ticks) {
 		}
     actionState = nextState;
     if(actionState == SLASH_A1) {
-			slash[0]->setAlive(true);
       stateTimer = 12;
+    }
+
+    else {
+    }
+  }
+
+  if(actionState == SLASH_A1) {
+			slash[0]->setAlive(true);
     }
 
     else {
       slash[0]->setAlive(false);
     }
-  }
 
   if(stateTimer > -1) --stateTimer;
 
@@ -262,6 +268,7 @@ void Player::update(Uint32 ticks) {
 
 void Player::attachBarrier(Drawable *b) {
 	barrier.push_back((Barrier*)b);
+  
 }
 
 void Player::detachBarrier() {

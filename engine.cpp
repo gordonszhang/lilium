@@ -185,6 +185,7 @@ void Engine::update(Uint32 ticks) {
       playerAlive = true;
       player = new Player("playership");
 			((Player*)player)->attachBarrier(barrier);
+      ((Player*)player)->attachSlash(barrier);
       ((Player*)player)->attachEnemy(boss);
       Viewport::getInstance().setObjectToTrack(player);
       player->setAlive(false);
@@ -258,7 +259,7 @@ void Engine::update(Uint32 ticks) {
 
 void Engine::checkForCollisions() {
 
-  std::vector<Drawable*>::const_iterator it = bullets.begin();
+  std::vector<Drawable*>::iterator it = bullets.begin();
   int collisions = 0;
   while ( it != bullets.end() ) {
     if(!(*it)->isAlive()) {
@@ -284,6 +285,8 @@ void Engine::checkForCollisions() {
       std::cout << "collision!" << std::endl;
     	(*it)->setVelocityX(-(*it)->getVelocityX());
 	    (*it)->setVelocityY(-(*it)->getVelocityY());
+      playerBullets.push_back(*it);
+      it = bullets.erase(it);
     }
 
     else if ( strategy->execute(*player, **it) ) {
@@ -298,6 +301,7 @@ void Engine::checkForCollisions() {
       Drawable* temp = new Sprite("playershipE");
       ((Player*)player)->detachBarrier();
       ((Player*)player)->detachEnemy();
+      ((Player*)player)->detachSlash();
       temp->setX(player->getX());
       temp->setY(player->getY());
       Drawable* explodingSprite = new ExplodingSprite(*static_cast<Sprite*>(temp));
@@ -307,7 +311,9 @@ void Engine::checkForCollisions() {
       deathTimer = 0;
       break;
     }
-    ++it;
+    else {
+      ++it;
+    }
   }
   it = playerBullets.begin();
   while ( it != playerBullets.end() ) {
