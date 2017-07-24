@@ -71,15 +71,19 @@ void Slash::update(Uint32 ticks) {
     switch(direction) {
         case UP:
             selectedFrames = framesUp;
+            setName("slashUp");
             break;
         case DOWN:
             selectedFrames = framesDown;
+            setName("slashDown");
             break;
         case LEFT:
             selectedFrames = framesLeft;
+            setName("slashLeft");
             break;
         case RIGHT:
             selectedFrames = framesRight;
+            setName("slashRight");
             break;
         default:
             break;

@@ -266,6 +266,7 @@ void Engine::checkForCollisions() {
       continue;
     }
     if(!playerAlive || !player->isAlive()) break;
+    /*
     if (strategy->execute(*barrier, **it) && (((Barrier*)barrier)->isLight() == ((Bullet*)(*it))->isLight())) {
       ++collisions;
       hud.updateCollisions(collisions);
@@ -278,9 +279,11 @@ void Engine::checkForCollisions() {
         int i = it - bullets.begin();
         freeBullets.push(i);
     }
-
+    */
     if (strategy->execute(*slash, **it) && slash->isAlive()) {
-
+      std::cout << "collision!" << std::endl;
+    	(*it)->setVelocityX(-(*it)->getVelocityX());
+	    (*it)->setVelocityY(-(*it)->getVelocityY());
     }
 
     else if ( strategy->execute(*player, **it) ) {
