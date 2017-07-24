@@ -26,6 +26,7 @@ Player::Player( const std::string& name) :
 	framesTurnLeft(RenderContext::getInstance()->getFrames(name+"UL")),
 	selectedFrames(frames),
 	barrier(),
+  slash(),
   enemy(),
   slashUp(RenderContext::getInstance()->getFrame("slashUp")),
   slashDown(RenderContext::getInstance()->getFrame("slashDown")),
@@ -134,7 +135,7 @@ void Player::handleInput() {
     if(moveVector[0] != 0 || moveVector[1] != 0) {
       nextState = MOVE;
     }
-    ((Slash*)slash[0])->setDirection(direction);
+    
   }
   while(SDL_PollEvent(&event)) {
     // "Slash" input
@@ -170,11 +171,12 @@ void Player::update(Uint32 ticks) {
 		}
     actionState = nextState;
     if(actionState == SLASH_A1) {
-			std::cout << "hi im slashing" << std::endl;
+			slash[0]->setAlive(true);
       stateTimer = 12;
     }
 
-    else if(actionState == MOVE) {
+    else {
+      slash[0]->setAlive(false);
     }
   }
 
@@ -254,6 +256,7 @@ void Player::update(Uint32 ticks) {
 	slash[0]->setVelocityX(getVelocityX());
 	slash[0]->setVelocityY(getVelocityY());
 	slash[0]->update(ticks);
+  ((Slash*)slash[0])->setDirection(direction);
   enemy[0]->updatePlayerPos(getPosition());
 }
 
@@ -285,6 +288,5 @@ void Player::detachSlash() {
 void Player::setAlive(bool a) {
   Drawable::setAlive(a);
 	barrier[0]->setAlive(a);
-  slash[0]->setAlive(a);
   if(!a) offFrame = 0;
 }

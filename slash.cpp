@@ -59,15 +59,13 @@ Slash::Slash(const Slash& s) :
   { }
 
 void Slash::draw() const {
-  if(isAlive() || offFrame > 1) {
     selectedFrames[currentFrame]->draw(getX(), getY());
-  }
 }
 
 void Slash::update(Uint32 ticks) {
   advanceFrame(ticks);
 
-  if(!isAlive()) offFrame = (offFrame + 1) % 4;
+  //if(!isAlive()) offFrame = (offFrame + 1) % 4;
 	//std::cout << "state: " << state << std::endl;
 	
     switch(direction) {
@@ -90,7 +88,7 @@ void Slash::update(Uint32 ticks) {
 
 void Slash::setAlive(bool a) {
   Drawable::setAlive(a);
-  if(!a) offFrame = 0;
+  //if(!a) offFrame = 0;
 }
 
 void Slash::setDirection(int d) {

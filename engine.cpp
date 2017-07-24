@@ -70,7 +70,7 @@ Engine::Engine() :
 {
   player->setSize(4);
 	((Player*)player)->attachBarrier(barrier);
-  ((Player*)player)->attachBarrier(slash);
+  ((Player*)player)->attachSlash(slash);
   ((Player*)player)->attachEnemy(boss);
   //sprites.push_back(player);
   //switchSprite();
@@ -277,6 +277,10 @@ void Engine::checkForCollisions() {
         (*it)->setAlive(false);
         int i = it - bullets.begin();
         freeBullets.push(i);
+    }
+
+    if (strategy->execute(*slash, **it) && slash->isAlive()) {
+
     }
 
     else if ( strategy->execute(*player, **it) ) {
