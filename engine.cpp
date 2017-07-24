@@ -185,7 +185,7 @@ void Engine::update(Uint32 ticks) {
       playerAlive = true;
       player = new Player("playership");
 			((Player*)player)->attachBarrier(barrier);
-      ((Player*)player)->attachSlash(barrier);
+      ((Player*)player)->attachSlash(slash);
       ((Player*)player)->attachEnemy(boss);
       Viewport::getInstance().setObjectToTrack(player);
       player->setAlive(false);
