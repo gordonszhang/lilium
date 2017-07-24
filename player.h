@@ -7,15 +7,7 @@
 #include "drawable.h"
 #include "barrier.h"
 #include "sprite.h"
-
-#define IDLE 0
-#define SLASH_A1 1
-#define MOVE 2
-
-#define UP 100
-#define DOWN 101
-#define LEFT 102
-#define RIGHT 103
+#include "slash.h"
 
 class Player : public Drawable {
 public:
@@ -32,6 +24,9 @@ public:
 
 	void attachBarrier(Drawable* b);
 	void detachBarrier();
+
+  void attachSlash(Drawable* s);
+  void detachSlash();
 
   void attachEnemy(Drawable* b);
   void detachEnemy();
@@ -50,6 +45,7 @@ protected:
   std::vector<Frame *> selectedFrames;
 	std::vector<Barrier *> barrier;
   std::vector<Sprite *> enemy;
+  std::vector<Slash *> slash;
   Frame* slashUp;
   Frame* slashDown;
   Frame* slashRight;

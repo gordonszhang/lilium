@@ -37,6 +37,7 @@ private:
   std::queue<int> freeEnemies;
   Drawable* player;
 	Drawable* barrier;
+  Drawable* slash;
   Drawable* boss;
 
   int currentSprite;
@@ -53,6 +54,7 @@ private:
   bool godmode;
 	bool playerShooting;
   bool bossAlive;
+  bool bulletTime;
 
   CollisionStrategy* strategy;
 

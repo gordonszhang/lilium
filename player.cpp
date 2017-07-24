@@ -102,6 +102,7 @@ void Player::handleInput() {
   SDL_Event event;
   
   const Uint8* keystate = SDL_GetKeyboardState(NULL);
+  
   // Player control
   if(actionState != SLASH_A1) {
     moveVector[0] = 0;
@@ -133,6 +134,7 @@ void Player::handleInput() {
     if(moveVector[0] != 0 || moveVector[1] != 0) {
       nextState = MOVE;
     }
+    ((Slash*)slash[0])->setDirection(direction);
   }
   while(SDL_PollEvent(&event)) {
     // "Slash" input
@@ -247,6 +249,11 @@ void Player::update(Uint32 ticks) {
 	barrier[0]->setVelocityX(getVelocityX());
 	barrier[0]->setVelocityY(getVelocityY());
 	barrier[0]->update(ticks);
+  slash[0]->setX(getX());
+	slash[0]->setY(getY());
+	slash[0]->setVelocityX(getVelocityX());
+	slash[0]->setVelocityY(getVelocityY());
+	slash[0]->update(ticks);
   enemy[0]->updatePlayerPos(getPosition());
 }
 
@@ -266,9 +273,18 @@ void Player::detachEnemy() {
 	enemy.pop_back();
 }
 
+void Player::attachSlash(Drawable *s) {
+	slash.push_back((Slash*)s);
+}
+
+void Player::detachSlash() {
+	slash.pop_back();
+}
+
 
 void Player::setAlive(bool a) {
   Drawable::setAlive(a);
 	barrier[0]->setAlive(a);
+  slash[0]->setAlive(a);
   if(!a) offFrame = 0;
 }

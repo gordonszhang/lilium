@@ -22,6 +22,7 @@ OBJS = \
 	bullet.o \
 	player.o \
 	barrier.o \
+	slash.o \
 	vector2f.o \
 	clock.o \
 	engine.o \

@@ -12,6 +12,7 @@
 #include "engine.h"
 #include "frameGenerator.h"
 #include "barrier.h"
+#include "slash.h"
 
 //extern bool restart;
 
@@ -49,6 +50,7 @@ Engine::Engine() :
   freeEnemies(),
   player(new Player("playership")),
 	barrier(new Barrier("barrier")),
+  slash(new Slash("slash")),
   boss(new Sprite("crystal")),
   currentSprite(-1),
   radians(), counter(),
@@ -63,10 +65,12 @@ Engine::Engine() :
   godmode(false),
 	playerShooting(false),
   bossAlive(true),
+  bulletTime(false),
   strategy( new PerPixelCollisionStrategy )
 {
   player->setSize(4);
 	((Player*)player)->attachBarrier(barrier);
+  ((Player*)player)->attachBarrier(slash);
   ((Player*)player)->attachEnemy(boss);
   //sprites.push_back(player);
   //switchSprite();
@@ -284,17 +288,17 @@ void Engine::checkForCollisions() {
       //delete player;
       //player = new Player("playership");
       //sound[2];
-        Drawable* temp = new Sprite("playershipE");
-				((Player*)player)->detachBarrier();
-        ((Player*)player)->detachEnemy();
-        temp->setX(player->getX());
-        temp->setY(player->getY());
-        Drawable* explodingSprite = new ExplodingSprite(*static_cast<Sprite*>(temp));
-        player = explodingSprite;
-        Viewport::getInstance().setObjectToTrack(player);
-        playerAlive = false;
-        deathTimer = 0;
-        break;
+      Drawable* temp = new Sprite("playershipE");
+      ((Player*)player)->detachBarrier();
+      ((Player*)player)->detachEnemy();
+      temp->setX(player->getX());
+      temp->setY(player->getY());
+      Drawable* explodingSprite = new ExplodingSprite(*static_cast<Sprite*>(temp));
+      player = explodingSprite;
+      Viewport::getInstance().setObjectToTrack(player);
+      playerAlive = false;
+      deathTimer = 0;
+      break;
     }
     ++it;
   }
@@ -314,11 +318,11 @@ void Engine::checkForCollisions() {
       freePlayerBullets.push(i);
       if(!boss->isAlive()) {
         //sound[3];
-      //std::cout << sprites[10]->getName();
-      //Drawable* boom = new ExplodingSprite(*static_cast<Sprite*>(player));
-      //player = boom;
-      //delete player;
-      //player = new Player("playership");
+        //std::cout << sprites[10]->getName();
+        //Drawable* boom = new ExplodingSprite(*static_cast<Sprite*>(player));
+        //player = boom;
+        //delete player;
+        //player = new Player("playership");
 
         Drawable* temp = new Sprite("crystal");
         temp->setX(boss->getX());
@@ -414,12 +418,14 @@ void Engine::play() {
     ticks = clock.getElapsedTicks();
 
     if ( ticks > 0 ) {
-        /*
+        
       if(bossAlive) {
-        if(counter % 24 == 0) {
-        for(int i = 0; i < 8; ++i) {
-          float velX = 100.0 * cos(radians + i * (M_PI / 4.0));
-          float velY = 100.0 * sin(radians + i * (M_PI / 4.0));
+        if(counter % 64 == 0) {
+        for(int i = 0; i < 1; ++i) {
+          //float velX = 100.0 * cos(radians + i * (M_PI / 4.0));
+          //float velY = 100.0 * sin(radians + i * (M_PI / 4.0));
+          float velX = 0.0;
+          float velY = 100.0;
           if(freeBullets.size()) {
             int f = freeBullets.front();
             freeBullets.pop();
@@ -434,25 +440,11 @@ void Engine::play() {
             b->setPosition(boss->getPosition() + Vector2f(16, 16));
             bullets.push_back(b);
           }
-          if(freeBullets.size()) {
-            int f = freeBullets.front();
-            freeBullets.pop();
-            bullets[f]->reset(velY, velX);
-            ((Bullet*)(bullets[f]))->setLight(false);
-            bullets[f]->setPosition(boss->getPosition() + Vector2f(16, 16));
-          }
-
-          else {
-            Drawable* b = new Bullet("bullet", velY, velX);
-            ((Bullet*)b)->setLight(false);
-            b->setPosition(boss->getPosition() + Vector2f(16, 16));
-            bullets.push_back(b);
-          }
         }
         radians += M_PI / 32.0;
         }
       }
-      */
+      
       ++counter;
       clock.incrFrame();
       draw();

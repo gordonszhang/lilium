@@ -7,6 +7,15 @@
 #include "frame.h"
 #include "gamedata.h"
 
+#define IDLE 0
+#define SLASH_A1 1
+#define MOVE 2
+
+#define UP 100
+#define DOWN 101
+#define LEFT 102
+#define RIGHT 103
+
 // Drawable is an Abstract Base Class (ABC) that
 // specifies the methods that derived classes may
 // and must have.

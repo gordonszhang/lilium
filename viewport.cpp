@@ -25,10 +25,7 @@ void Viewport::setObjectToTrack(const Drawable *obj) {
 }
 
 void Viewport::draw() const {
-  IOmod::getInstance().
-    writeText("Gordon Zhang", viewWidth / 2 - 80, 30);
-  //IOmod::getInstance().
-    //writeText("Tracking "+objectToTrack->getName(), 30, 80);
+
 }
 
 void Viewport::update() {

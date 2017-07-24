@@ -56,18 +56,38 @@
 <slashUp>
   <file>images/slashUp.png</file>
   <frames>1</frames>
+  <startLoc x="718" y="300"/>
+  <frameInterval>100</frameInterval>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
 </slashUp>
 <slashDown>
   <file>images/slashDown.png</file>
   <frames>1</frames>
+  <startLoc x="718" y="300"/>
+  <frameInterval>100</frameInterval>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
 </slashDown>
 <slashRight>
   <file>images/slashRight.png</file>
   <frames>1</frames>
+  <startLoc x="718" y="300"/>
+  <frameInterval>100</frameInterval>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
 </slashRight>
 <slashLeft>
   <file>images/slashLeft.png</file>
   <frames>1</frames>
+  <startLoc x="718" y="300"/>
+  <frameInterval>100</frameInterval>
+  <speedX>0</speedX>
+  <speedY>0</speedY>
+  <transparency>true</transparency>
 </slashLeft>
 
 <playership>
